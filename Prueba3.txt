@@ -1,0 +1,138 @@
+CREATE DATABASE Reservaciones_BD
+GO
+
+USE Reservaciones_BD;
+GO
+
+CREATE TABLE Clientes(
+	IdCliente 	INT PRIMARY KEY IDENTITY(1,1),
+	Nombre		VARCHAR(30) NOT NULL,
+	Telefono	VARCHAR(8) NOT NULL,
+	Cedula		VARCHAR(14) NOT NULL
+)
+GO
+INSERT INTO Clientes VALUES('Alfredo', '89456658', '1212504061506B');
+INSERT INTO Clientes VALUES('Roberto', '57486699', '0012614893030c');
+
+CREATE TABLE Empleados(
+	IdEmpleado	INT PRIMARY KEY IDENTITY(1,1),
+	Nombre		VARCHAR(30) NOT NULL,
+	Cedula		VARCHAR(14) NOT NULL
+)
+GO
+INSERT INTO Empleados VALUES ('Maria','1212505661313L');
+INSERT INTO Empleados VALUES ('Fernanda','0065412564112R');
+SELECT *FROM Clientes
+
+CREATE TABLE Habitaciones(
+	IdHabitacion	INT PRIMARY KEY IDENTITY(1,1),
+	NumCamas		TINYINT NOT NULL,
+	Ambientacion	VARCHAR(18) NOT NULL,
+	Precio			MONEY NOT NULL
+)
+GO
+
+CREATE TABLE Reservas(
+	IdReservas		INT PRIMARY KEY IDENTITY(1,1),
+	IdHabitacion	INT FOREIGN KEY REFERENCES Habitaciones(IdHabitacion),
+	IdEmpleado		INT FOREIGN KEY REFERENCES Empleados(IdEmpleado),
+	IdCliente		INT FOREIGN KEY REFERENCES Clientes(IdCliente),
+	FechaReserva	DATE
+)
+GO
+INSERT INTO Reservas VALUES(1,2,1,'2022/06/04');
+INSERT INTO Reservas VALUES(2,1,1,'2021/03/08');
+
+
+
+--1) Cree un procedimiento almacenado que permita ver todas las habitaciones disponibles con un Precio inferior al presupuesto del cliente.
+
+CREATE PROCEDURE Mostrar_Habitaciones
+	@PresupuestoCliente MONEY
+AS
+	BEGIN
+		SELECT *FROM Habitaciones WHERE Precio<@PresupuestoCliente
+	END
+
+INSERT INTO Habitaciones VALUES(3,'Sueño Eterno',1200);
+INSERT INTO Habitaciones VALUES(1,'Relajacion',1500);
+INSERT INTO Habitaciones VALUES(2,'Solo amigos',600);
+INSERT INTO Habitaciones VALUES(3,'2n 1pareja',2000);
+INSERT INTO Habitaciones VALUES(1,'Acomodado',300);
+
+EXECUTE Mostrar_Habitaciones 800
+
+--2) Cree un procedimiento almacenado que permita realizar una inserción en la tabla Reservas.
+
+CREATE PROCEDURE Pcdt_InsertarR
+	@IdHabitacion	INT,
+	@IdEmpleado		INT,
+	@IdCliente		INT,
+	@FechaReserva	DATE
+AS
+	BEGIN
+		INSERT INTO Reservas VALUES(@IdHabitacion, @IdEmpleado, @IdCliente, @FechaReserva)
+
+	END
+GO
+
+EXECUTE Pcdt_InsertarR 1,1,1,'2022/05/06';
+
+--3) Cree un procedimiento almacenado que le permita ver el Nombre de un Cliente empleando la Cedula.
+
+CREATE PROCEDURE Pcdt_VerCliente
+	@Cedula	VARCHAR(14)
+AS
+	BEGIN
+		SELECT Nombre
+		FROM Clientes WHERE Nombre=@Cedula
+	END
+GO
+
+EXECUTE Pcdt_VerCliente '0012614893030c';
+
+--4) Cree un procedimiento almacenado que le permita actualizar el Telefono de un Cliente empleando su IdCliente.
+CREATE PROCEDURE Actualizar
+	@IdCliente	INT,
+	@Telefono	VARCHAR(8)
+AS
+	BEGIN
+		UPDATE Clientes
+		SET 
+			Telefono = @Telefono
+			WHERE IdCliente = @IdCliente
+	END
+GO
+
+--5) Cree un procedimiento almacenado que le permita eliminar un registro de la tabla Habitaciones.
+CREATE PROCEDURE Pcdt_EliminarH
+	@NumCamas INT
+AS
+	BEGIN
+		DELETE FROM Habitaciones WHERE NumCamas = @NumCamas
+	END
+GO
+
+
+--6) Cree un procedimiento almacenado que le permita consultar las Reservas realizadas en un año dado.
+CREATE PROCEDURE Pcdt_ConsulAño
+	@FechaReserva INT
+AS	
+	BEGIN
+		SELECT YEAR(FechaReserva), *FROM Reservas WHERE YEAR(FechaReserva) =@FechaReserva;
+	END
+GO
+
+--Cada procedimiento almacenado tiene un puntaje de 2.5
+--Cada procedimiento almacenado emplea parámetros.
+--Recuerde emplear mayúsculas para las palabras reservadas y tabulaciones en las sentencias.
+
+
+
+
+
+
+
+
+
+
