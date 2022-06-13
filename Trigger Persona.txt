@@ -1,0 +1,60 @@
+CREATE DATABASE T_Persona
+GO
+
+
+USE T_Persona
+GO
+
+
+--Se verifica si no existe una tabla Persona
+IF OBJECT_ID ('Persona') IS NOT NULL
+  BEGIN 
+    DROP TABLE Persona
+END
+GO
+--Se crea la tabla Persona
+CREATE TABLE Persona(
+	Id_Persona	INT PRIMARY KEY IDENTITY(1,1),
+	Nombre		VARCHAR (30) NOT NULL,
+	Fecha_N		DATE NOT NULL,
+	Edad		INT NOT NULL,
+	Correo		VARCHAR(50)NOT NULL,
+	Genero		CHAR
+) 
+GO
+
+CREATE TRIGGER PersoTrigger
+ON Persona
+AFTER INSERT, UPDATE
+AS
+BEGIN 
+	IF (SELECT Edad FROM INSERTED)<=18
+		BEGIN
+			PRINT 'La persona es menor de edad'
+			ROLLBACK TRANSACTION
+			
+		END
+	ELSE
+		PRINT'La operación fue un éxito'
+END
+GO
+
+CREATE TRIGGER deletPerson
+ON Persona
+AFTER DELETE
+AS
+BEGIN 
+	PRINT 'Se ha eliminado un registro'
+END
+GO
+
+INSERT INTO Persona VALUES('Juan', '2000/10/05',21,'Juan@gmail.com','M')
+GO
+INSERT INTO Persona VALUES('Alberto', '1999/08/13',22,'alberto@gmail.com','M')
+GO
+INSERT INTO Persona VALUES('Maria', '2005/11/01',16,'Maria@gmail.com','M')
+GO
+INSERT INTO Persona VALUES('Alicia', '1990/02/17',32,'Alicia@gmail.com','M')
+GO
+
+DELETE Persona WHERE Nombre='Juan'

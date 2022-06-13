@@ -1,0 +1,249 @@
+CREATE DATABASE Bicicleta
+GO
+USE Bicicleta
+/*Creacion de las tablas*/
+CREATE TABLE Vendedor(
+	Id_Vendedor		INT PRIMARY KEY IDENTITY(1,1),
+	Nombres			VARCHAR(50),
+	Apellidos		VARCHAR(50),
+	Telefono		VARCHAR(12)
+)
+GO
+
+CREATE TABLE Factura(
+	Id_Factura		INT PRIMARY KEY IDENTITY(1,1),
+	Numero_P		INT,
+	Monto_T			MONEY,
+	Fecha			DATE,
+	Id_Cliente		INT,
+	Id_Vendedor		INT,
+	
+	/*Se relaciona la tabla Factura con la de vendedor*/
+	CONSTRAINT FK_Factura_Vendedor 
+	FOREIGN KEY (Id_Vendedor) 
+	REFERENCES Vendedor(Id_Vendedor),
+	/*Se relaciona la tabla Factura con la de Cliente*/
+	CONSTRAINT FK_Factura_Cliente
+	FOREIGN KEY (Id_Cliente)
+	REFERENCES Cliente(Id_Cliente)
+)
+GO
+
+CREATE TABLE Cliente(
+	Id_Cliente		INT PRIMARY KEY IDENTITY(1,1),
+	Nombres			VARCHAR(50),
+	Apellidos		VARCHAR(50),
+	Telefono		VARCHAR(12),
+	Direccion		VARCHAR(50)
+	
+)
+GO
+
+CREATE TABLE Bicicleta(
+	Id_Bicicleta	INT PRIMARY KEY,
+	Iniciales		VARCHAR(4),
+	Id_Cliente		INT,
+	Color			VARCHAR(20),
+	Marca			VARCHAR(30),
+	/*Se relaciona la tabla bicicleta con la tabla Cliente*/
+	CONSTRAINT FK_Bicicleta_Cliente
+	FOREIGN KEY (Id_Cliente)
+	REFERENCES Cliente(Id_Cliente)
+)
+GO
+
+/*Se insertan los registros en la tabla Vendedor*/
+
+INSERT INTO Vendedor(Nombres, Apellidos, Telefono)
+VALUES('Juan Alberto', 'Fonseca', '88584875')
+GO
+INSERT INTO Vendedor(Nombres, Apellidos, Telefono)
+VALUES('Pedro', 'Castillo Millón', '54759632')
+GO
+INSERT INTO Vendedor(Nombres, Apellidos, Telefono)
+VALUES('Marco Aurelio', 'Rodriguez Pineda', '87452222')
+GO
+INSERT INTO Vendedor(Nombres, Apellidos, Telefono)
+VALUES('Augusto José', 'Mendoza Mendoza', '82125589')
+GO
+INSERT INTO Vendedor(Nombres, Apellidos, Telefono)
+VALUES('Manuel de Jesus', 'Silva Argueta', '84775545')
+GO
+INSERT INTO Vendedor(Nombres, Apellidos, Telefono)
+VALUES('Maria José', 'Espinoza Tinoco', '84251163')
+GO
+INSERT INTO Vendedor(Nombres, Apellidos, Telefono)
+VALUES('Harvin Jardiel', 'Brenes Orozco', '82556936')
+GO
+INSERT INTO Vendedor(Nombres, Apellidos, Telefono)
+VALUES('Kathy Esmeralda', 'Guerrero Lopez', '59664485')
+GO
+INSERT INTO Vendedor(Nombres, Apellidos, Telefono)
+VALUES('Daniela del Pilar', 'Doña', '87523362')
+GO
+INSERT INTO Vendedor(Nombres, Apellidos, Telefono)
+VALUES('Ryan Ariel', 'Montano Calderón', '82651133')
+GO
+
+SELECT *FROM Vendedor
+
+/*Se insertan los registros en la tabla Factura*/
+INSERT INTO Factura(Numero_P, Monto_T, Fecha)
+Values(6, 1200, '14/04/2020' )
+GO
+INSERT INTO Factura(Numero_P, Monto_T, Fecha)
+Values(4, 700, '14/04/2020' )
+GO
+INSERT INTO Factura(Numero_P, Monto_T, Fecha)
+Values(15, 2700, '14/04/2020' )
+GO
+
+INSERT INTO Factura(Numero_P, Monto_T, Fecha) 
+Values(17, 4400, '15/04/2020' )
+GO
+
+INSERT INTO Factura(Numero_P, Monto_T, Fecha) 
+Values(1, 84, '15/04/2020' )
+GO
+
+INSERT INTO Factura(Numero_P, Monto_T, Fecha) 
+Values(27, 6657, '15/04/2020' )
+GO
+
+INSERT INTO Factura(Numero_P, Monto_T, Fecha) 
+Values(3, 195, '15/04/2020' )
+GO
+
+INSERT INTO Factura(Numero_P, Monto_T, Fecha) 
+Values(10, 650, '15/04/2020' )
+GO
+
+INSERT INTO Factura(Numero_P, Monto_T, Fecha) 
+Values(19, 2623, '16/04/2020' )
+GO
+
+INSERT INTO Factura(Numero_P, Monto_T, Fecha)
+Values(13, 889, '16/04/2020' )
+GO
+
+SELECT *FROM Factura
+
+/*Se insertan los registros en la tabla Cliente*/
+
+INSERT INTO Cliente(Nombres, Apellidos, Telefono, Direccion)
+VALUES('Jessica', 'Morales', '89556632','Frente al parque')
+GO 
+
+INSERT INTO Cliente(Nombres, Apellidos, Telefono, Direccion)
+VALUES('Leslie', 'Lira', '78856525','Apartamento Land N 12')
+GO
+
+INSERT INTO Cliente(Nombres, Apellidos, Telefono, Direccion)
+VALUES('Giovanni', 'Arauz', '87415125','De la Alcaldia 1/2C sur')
+GO
+
+INSERT INTO Cliente(Nombres, Apellidos, Telefono, Direccion)
+VALUES('Franco', 'Pol', '81230050','Semaforos Cementerio 2C norte')
+GO
+
+INSERT INTO Cliente(Nombres, Apellidos, Telefono, Direccion)
+VALUES('Arturo', 'Escobar', '89660326','Maxi Pali 2C sur 1/2 este')
+GO
+
+INSERT INTO Cliente(Nombres, Apellidos, Telefono, Direccion)
+VALUES('Ariana', 'Pilar', '81512551','Costado este del parque')
+GO
+
+INSERT INTO Cliente(Nombres, Apellidos, Telefono, Direccion)
+VALUES('Maria', 'Espinoza', '81512689','Bar la Choza 3C sur')
+GO
+
+INSERT INTO Cliente(Nombres, Apellidos, Telefono, Direccion)
+VALUES('Alexander', 'Tercero', '71515639','Frente a gasolinera puma')
+GO
+
+INSERT INTO Cliente(Nombres, Apellidos, Telefono, Direccion)
+VALUES('Junior', 'Matuz', '82289278','De la UNAN 1C oeste')
+GO
+
+INSERT INTO Cliente(Nombres, Apellidos, Telefono, Direccion)
+VALUES('Antonio', 'Fonseca', '84245696','Del Regina 1/2C Sur')
+GO
+
+SELECT *FROM Cliente
+
+/*Se insertan los registros en la tabla Vendedor*/
+
+INSERT INTO Bicicleta(Id_Bicicleta, Iniciales, Color, Marca)
+VALUES(1, 'FRCK', 'Verde', 'Yunsk')
+GO
+
+INSERT INTO Bicicleta(Id_Bicicleta, Iniciales, Color, Marca)
+VALUES(2, 'LBHH', 'Rojo', 'NISSAN')
+GO
+
+INSERT INTO Bicicleta(Id_Bicicleta, Iniciales, Color, Marca)
+VALUES(3, 'HCCF', 'Azul', 'NISSAN')
+GO
+
+INSERT INTO Bicicleta(Id_Bicicleta, Iniciales, Color, Marca)
+VALUES(4, 'TRZO', 'Amarillo', 'SAMSUNG')
+GO
+
+INSERT INTO Bicicleta(Id_Bicicleta, Iniciales, Color, Marca)
+VALUES(5, 'AJBG', 'Verde', 'SAMSUNG')
+GO
+
+INSERT INTO Bicicleta(Id_Bicicleta, Iniciales, Color, Marca)
+VALUES(6, 'BJNN', 'Negro', 'APPLE')
+GO
+
+INSERT INTO Bicicleta(Id_Bicicleta, Iniciales, Color, Marca)
+VALUES(7, 'SJNL', 'Blanco', 'SAMSUNG')
+GO
+
+INSERT INTO Bicicleta(Id_Bicicleta, Iniciales, Color, Marca)
+VALUES(8, 'ERER', 'Blanco', 'APPLE')
+GO
+
+INSERT INTO Bicicleta(Id_Bicicleta, Iniciales, Color, Marca)
+VALUES(9, 'RGTT', 'Negro', 'APPLE')
+GO
+
+INSERT INTO Bicicleta(Id_Bicicleta, Iniciales, Color, Marca)
+VALUES(10, 'ABDO', 'Azul', 'Yunsk')
+GO
+
+SELECT *FROM Bicicleta
+
+/*Actualizacion de registro 'telefono' en la tabla cliente*/
+
+UPDATE Cliente SET Telefono= 89898989 WHERE Id_Cliente=1
+
+UPDATE Cliente SET Telefono= 84475125 WHERE Id_Cliente=3
+
+UPDATE Cliente SET Telefono= 78785869 WHERE Id_Cliente=6
+
+UPDATE Cliente SET Telefono= 57485589 WHERE Id_Cliente=9
+
+UPDATE Cliente SET Telefono= 25170192 WHERE Id_Cliente=10
+
+SELECT *FROM Cliente
+
+/*Mostrar el id, nombre, apellido y numero de telefono de los clientes y ordenarlos por el nombre*/
+SELECT Id_Cliente, Nombres, Apellidos, Telefono FROM Cliente ORDER BY Nombres DESC
+
+/*Mostrar los registros de la tabla Factura con un monto igual o mayor a 900 */
+SELECT *FROM Factura WHERE Monto_T>=900
+
+/*Mostrar los vendedores que su apellido contenga la letra z*/
+SELECT *FROM Vendedor WHERE Apellidos LIKE '%Z%'
+
+/*Esta sentencia muestra los clientes que compraron mas de 8 productos y su gasto fue de igual o mas de 650*/
+SELECT *FROM Factura WHERE Numero_P>8 AND Monto_T>=650
+
+/*Se eliminan todos los registros de las tablas*/
+DELETE Vendedor
+DELETE Cliente
+DELETE Factura
+DELETE Bicicleta

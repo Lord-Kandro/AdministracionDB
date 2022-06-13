@@ -1,0 +1,145 @@
+CREATE DATABASE Trigger_Ventas
+GO
+
+
+USE Trigger_Ventas
+GO
+
+
+--Se verifica si no existe una tabla Cliente
+IF OBJECT_ID ('Cliente') IS NOT NULL
+  BEGIN 
+    DROP TABLE Cliente
+END
+GO
+--Se crea la tabla Cliente
+CREATE TABLE Cliente(
+	Id_Cliente INT PRIMARY KEY IDENTITY(1,1),
+	Nombre VARCHAR (30) NOT NULL,
+
+) 
+GO
+
+--Se verifica si no existe una tabla Producto
+IF OBJECT_ID ('Producto') IS NOT NULL
+  BEGIN 
+    DROP TABLE Producto
+END
+GO
+
+--Se crea la tabla Producto
+CREATE TABLE Producto(
+	Id_Producto INT PRIMARY KEY IDENTITY(1,1),
+	N_Producto VARCHAR(50) NOT NULL,
+	Precio MONEY NOT NULL,
+	Fecha_Vencimiento DATE 
+	
+)
+GO
+
+--Se verifica si no existe una tabla Venta
+IF OBJECT_ID ('Venta') IS NOT NULL
+  BEGIN 
+    DROP TABLE Venta
+END
+GO
+
+--Se crea la tabla Venta
+CREATE TABLE Venta(
+	Id_Venta	INT PRIMARY KEY IDENTITY(1,1),
+	Id_Cliente	INT NOT NULL,
+	Id_Producto INT NOT NULL,
+	Unidades	INT NOT NULL,
+	Monto_Total MONEY NOT NULL,
+	Fecha		DATE NOT NULL
+)
+GO
+
+
+
+--Se verifica si no existe una tabla Venta_Resp
+IF OBJECT_ID ('Venta_Resp') IS NOT NULL
+  BEGIN 
+    DROP TABLE Venta_Resp
+END
+GO
+
+--Se crea la tabla Venta_Resp
+CREATE TABLE Venta_Resp(
+	Id_Venta_Resp	INT PRIMARY KEY,
+	Id_Cliente		INT NOT NULL,
+	Id_Producto		INT NOT NULL,
+	Unidades		INT NOT NULL,
+	Monto_Total		MONEY NOT NULL,
+	Fecha			DATE NOT NULL
+)
+GO
+
+--Se hacen las relaciones
+ALTER TABLE Venta
+ADD CONSTRAINT FK_ClienteVenta
+FOREIGN KEY (Id_Cliente) REFERENCES Cliente(Id_Cliente)
+
+ALTER TABLE Venta
+ADD CONSTRAINT FK_ProductoVenta
+FOREIGN KEY (Id_Producto) REFERENCES Producto(Id_Producto)
+
+--Verificamos si no existe un trigger de nombre 'T_MontoT'
+IF OBJECT_ID ('T_MontoT') IS NOT NULL
+  BEGIN 
+    DROP TRIGGER T_MontoT
+END
+GO
+
+--Creamos el Trigger
+CREATE TRIGGER T_MontoT
+ON Venta
+AFTER INSERT, UPDATE
+AS
+BEGIN 
+	IF (SELECT Monto_Total FROM INSERTED)<=0
+		BEGIN
+			PRINT 'No se hizo la Operación, verifique el monto total'
+			ROLLBACK TRANSACTION
+			
+		END
+	ELSE
+		PRINT'La operación fue un éxito'
+		INSERT Venta_Resp SELECT  * FROM INSERTED
+	END
+GO
+
+--Hacemos las inserciones
+INSERT INTO Cliente VALUES('Roberto')
+INSERT INTO Cliente VALUES('Albus')
+INSERT INTO Cliente VALUES('James')
+INSERT INTO Cliente VALUES('Wong')
+
+SELECT *FROM Cliente
+
+
+INSERT INTO Producto VALUES('Coca Cola 3litros',70,'2024/02/19')
+INSERT INTO Producto VALUES('Desodorante Rexona',105,'2023/11/13')
+INSERT INTO Producto VALUES('Tallarines',20,'2023/08/01')
+INSERT INTO Producto VALUES('Agua Botella 500ml',20,'2023/01/10')
+
+SELECT *FROM Producto
+
+INSERT INTO Venta VALUES(1,1,19,2550,'2022/06/13')
+GO
+
+INSERT INTO Venta VALUES(2,2,20,1400,'2022/07/18')
+GO
+
+INSERT INTO Venta VALUES(3,3,14,280,'2022/08/04')
+GO
+
+SELECT  *FROM Venta
+
+
+SELECT  *FROM Venta_Resp
+
+
+
+--Comprobamos si el trigger funciona
+INSERT INTO Venta VALUES(3,3,2,0,'2022/05/15')

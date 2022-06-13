@@ -1,0 +1,15 @@
+USE Northwind
+GO
+
+--Consulta #1
+
+SELECT *FROM Products WHERE CategoryID= 2 AND UnitPrice>=20 AND UnitsInStock>=100
+
+--Consulta #2
+SELECT *FROM Employees WHERE City='London' OR City='Seattle' ORDER BY FirstName DESC
+
+--Consulta #3
+SELECT *FROM Orders WHERE OrderDate LIKE '%1997%'
+
+--Consulta #4
+SELECT UnitPrice * Quantity  AS 'Totales' FROM [Order Details]

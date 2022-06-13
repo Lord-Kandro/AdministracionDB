@@ -1,0 +1,245 @@
+0USE MASTER
+GO
+CREATE DATABASE Productora_BD
+GO
+USE Productora_BD
+GO
+
+
+--Se crea la tabla pelicula--
+ CREATE TABLE Pelicula  (
+  Id_Pelicula INT PRIMARY KEY IDENTITY(1,1),
+  Titulo VARCHAR(100),
+  FechaProduccion DATE,
+  Id_Director INT,
+  Id_Productora INT,
+  Id_Genero INT,
+  Id_Actor INT
+)
+GO
+--se crea la tabla Genero--
+CREATE TABLE Genero(
+  Id_Genero INT PRIMARY KEY IDENTITY(1,1),
+  Descripcion VARCHAR(100)
+)
+GO
+--se crea la tabla productora--
+
+ CREATE TABLE Productora(
+  Id_Productora INT PRIMARY KEY IDENTITY(1,1),
+  Nombre VARCHAR(50)
+)
+GO
+
+--Se creea la tabla Director--
+
+CREATE TABLE Director(
+  Id_Director INT PRIMARY KEY IDENTITY (1,1),
+  Nombre VARCHAR (50),
+  Apellido VARCHAR(50)
+)
+GO
+
+--Se crea la tabla Actor--
+CREATE TABLE Actor(
+  Id_Actor INT PRIMARY KEY IDENTITY(1,1),
+  Nombre VARCHAR (50),
+  Apellido VARCHAR(50)
+)
+GO
+--Se crea la tabla Renta--
+
+
+CREATE TABLE Renta (
+  Id_Renta INT PRIMARY KEY IDENTITY(1,1),
+  Cantidad INT,
+  FechaRenta DATE,
+  FechaDevolucion DATE,
+  Id_Cliente INT,
+  Id_Pelicula INT
+)
+GO
+
+--Se crea la tabLA cliente--
+CREATE TABLE Cliente(
+  Id_Cliente INT PRIMARY KEY IDENTITY (1,1),
+  Nombre VARCHAR(50),
+  Apellido VARCHAR(50),
+  Telefono VARCHAR(8)
+)
+GO
+
+-- Aqui se crean la tablas de Respaldo--
+ CREATE TABLE RP_Pelicula  (
+  Id_Pelicula INT PRIMARY KEY,
+  Titulo VARCHAR(50),
+  FechaProduccion DATE,
+  Id_Director INT,
+  Id_Productora INT,
+  Id_Genero INT,
+  Id_Actor INT
+)
+GO
+
+
+CREATE TABLE RP_Genero(
+  Id_Genero INT PRIMARY KEY,
+  Descripcion VARCHAR(100)
+)
+GO
+
+
+ CREATE TABLE RP_Productora(
+  Id_Productora INT PRIMARY KEY,
+  Nombre VARCHAR(50)
+)
+GO
+
+CREATE TABLE RP_Director(
+  Id_Director INT PRIMARY KEY,
+  Nombre VARCHAR (50),
+  Apellido VARCHAR(50)
+)
+GO
+
+CREATE TABLE RP_Actor(
+  Id_Actor INT PRIMARY KEY,
+  Nombre VARCHAR (50),
+  Apellido VARCHAR(50)
+)
+GO
+
+CREATE TABLE RP_Renta (
+  Id_Renta INT PRIMARY KEY,
+  Cantidad INT,
+  FechaRenta DATE,
+  FechaDevolucion DATE,
+  Id_Cliente INT,
+  Id_Pelicula INT
+)
+GO
+
+CREATE TABLE RP_Cliente(
+  Id_Cliente INT PRIMARY KEY,
+  Nombre VARCHAR(50),
+  Apellido VARCHAR(50),
+  Telefono VARCHAR(8)
+)
+GO
+--Aqui se crean los Trigger--
+CREATE TRIGGER T_Pelicula
+ON Pelicula
+AFTER INSERT
+AS
+BEGIN
+INSERT RP_Pelicula SELECT * FROM INSERTED
+END 
+GO
+
+--Hacemos la inserccion y seleccionamos--
+INSERT INTO Pelicula (Titulo, FechaProduccion)
+ VALUES ('Son como niños', '2015-05-09')
+GO
+SELECT * FROM Pelicula
+GO
+SELECT * FROM RP_Pelicula
+GO
+
+--Creacion del trigger--
+
+CREATE TRIGGER T_Genero
+ON Genero
+AFTER INSERT
+AS
+BEGIN
+INSERT RP_Genero SELECT * FROM INSERTED
+END 
+GO
+
+--insertamos los datos y seleccionamos--
+INSERT INTO Genero(Descripcion)
+ VALUES ('Unos amigos con su familia van a la cabaña')
+ GO
+SELECT * FROM Genero
+GO
+
+SELECT * FROM RP_Genero
+GO
+
+
+--Creacion del Trigger--
+CREATE TRIGGER T_Productora
+ON Productora
+AFTER INSERT
+AS
+BEGIN
+INSERT RP_Productora SELECT * FROM INSERTED
+END 
+GO
+
+--Insertamos datos y Seleccionamos--
+
+INSERT INTO Productora(Nombre)
+ VALUES ('NETFLIX')
+
+SELECT * FROM Productora
+
+SELECT * FROM RP_Productora
+GO
+
+--Creaccion del Trigger--
+CREATE TRIGGER T_Director
+ON Director
+AFTER INSERT
+AS
+BEGIN
+INSERT RP_Director SELECT * FROM INSERTED
+END 
+GO
+
+--Insertamos Datos y Seleccionamos--
+INSERT INTO Director(Nombre, Apellido)
+ VALUES ('Adam', 'Sandler')
+
+SELECT * FROM Director
+
+SELECT * FROM Director
+GO
+
+--Creaccion del Trigger--
+CREATE TRIGGER T_Actor
+ON Actor
+AFTER INSERT
+AS
+BEGIN
+INSERT RP_Actor SELECT * FROM INSERTED
+END 
+GO
+--Insertamos Datos y seleccionamos--
+INSERT INTO Actor(Nombre, Apellido)
+ VALUES ('Adam', 'Sandler')
+
+SELECT * FROM Actor
+
+SELECT * FROM Actor
+GO
+
+--Creaccion del Trigger--
+CREATE TRIGGER T_Renta
+ON Renta
+AFTER INSERT
+AS
+BEGIN
+INSERT RP_Renta SELECT * FROM INSERTED
+END 
+GO
+
+--Insertamos Datos y Seleccionamos--
+
+INSERT INTO Renta(Cantidad, FechaRenta, FechaDevolucion)
+ VALUES (15, '2021-05-25', '2021-05-26')
+
+SELECT * FROM Renta
+
+SELECT * FROM Renta
+GO

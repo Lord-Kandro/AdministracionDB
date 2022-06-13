@@ -1,0 +1,184 @@
+CREATE DATABASE Hospital
+GO
+
+USE Hospital
+GO
+
+--Creacion de Tabla Visita
+CREATE TABLE Visita(
+	Id_Visita INT PRIMARY KEY IDENTITY (1,1),
+	Fecha_Visita DATE,
+	Motivo_Visita VARCHAR (50),
+	N_Pruebas INT,
+	Diagnostico VARCHAR (100),
+	Tratamiento VARCHAR (160),
+	Id_Medico INT,
+	Id_Paciente INT
+)
+GO
+
+--Creacion de Tabla Historial de Ingreso
+CREATE TABLE Hist_Ingreso(
+	Id_Hist_Ingreso INT PRIMARY KEY IDENTITY (1,1),
+	Fecha_Ingreso DATE,
+	Fecha_Alta DATE,
+	Id_Paciente INT
+)
+GO
+
+--Creacion de Tabla Medico
+CREATE TABLE Medico(
+	Id_Medico INT PRIMARY KEY IDENTITY (1,1),
+	Nombres VARCHAR (50),
+	Apellidos VARCHAR (50),
+	Especialidad VARCHAR (35),
+	Fecha_Nacimiento DATE,
+	Cedula VARCHAR (15),
+	Edad INT,
+	Telefono VARCHAR(12),
+	Direccion_Dom VARCHAR (50),
+	Municipio VARCHAR (30),
+	Departamento VARCHAR (30)
+)
+GO
+
+--Creacion de Tabla Paciente
+CREATE TABLE Paciente(
+	Id_Paciente INT PRIMARY KEY IDENTITY (1,1),
+	Nombres VARCHAR (50),
+	Apellidos VARCHAR (50),
+	NS_Medico INT,
+	Fecha_Nacimiento DATE,
+	Sexo VARCHAR (16),
+	Edad INT,
+	Cedula VARCHAR (15),
+	Telefono VARCHAR (12),
+	Direccion_Dom VARCHAR (50),
+	Municipio VARCHAR (30),
+	Departamento VARCHAR (30),
+)
+GO
+
+
+--Llave Foranea Un médico puede atender varias visitas
+ALTER TABLE Visita
+	ADD CONSTRAINT FK_Visita_Medico
+	FOREIGN KEY (Id_Medico) REFERENCES Medico(Id_Medico);
+
+-- Llave Foranea Un paciente puede ir a varias visitas
+ALTER TABLE Visita
+	ADD CONSTRAINT FK_Visita_Paciente
+	FOREIGN KEY (Id_Paciente) REFERENCES Paciente(Id_Paciente);
+
+-- Llave Un paciente puede tener varios registros en su historial de ingreso
+ALTER TABLE Hist_Ingreso
+	ADD CONSTRAINT FK_HisIngreso_Paciente
+	FOREIGN KEY (Id_Paciente) REFERENCES Paciente(Id_Paciente);
+
+--Inserciones en la tabla Visita
+INSERT INTO Visita(Fecha_Visita,Motivo_Visita,N_Pruebas,Diagnostico,Tratamiento)
+VALUES('15/02/2022','Dolor abdominal', 3,'Le duele el estomago','Dos cervezas en ayuda')
+
+
+INSERT INTO Visita(Fecha_Visita,Motivo_Visita,N_Pruebas,Diagnostico,Tratamiento)
+VALUES('17/02/2022','Fractura Craneoencefálica', 1,'Le rajaron la cabeza','Cirugia de alto riesgo')
+
+
+INSERT INTO Visita(Fecha_Visita,Motivo_Visita,N_Pruebas,Diagnostico,Tratamiento)
+VALUES('18/02/2022','Pulso acelerado', 7,'Ataque Cardiaco','asignarle un marcapasos')
+
+
+INSERT INTO Visita(Fecha_Visita,Motivo_Visita,N_Pruebas,Diagnostico,Tratamiento)
+VALUES('19/02/2022','Ematoma grado 3 en rodilla', 1,'Desgaste de rotula','Cirugia de reconstruccion y retirarse de los deportes')
+
+
+INSERT INTO Visita(Fecha_Visita,Motivo_Visita,N_Pruebas,Diagnostico,Tratamiento)
+VALUES('20/02/2022','No puede respirar', 2,'Covid-19','Vapores con Vaporup y eucalipto, no salir en 21 dias')
+
+--Inserciones en la tabla Historial de Ingreso
+INSERT INTO Hist_Ingreso(Fecha_Ingreso,Fecha_Alta)
+VALUES('01/02/2022','02/02/2022')
+
+INSERT INTO Hist_Ingreso(Fecha_Ingreso,Fecha_Alta)
+VALUES('21/12/2021','29/12/2021')
+
+INSERT INTO Hist_Ingreso(Fecha_Ingreso,Fecha_Alta)
+VALUES('14/11/2021','30/11/2021')
+
+INSERT INTO Hist_Ingreso(Fecha_Ingreso,Fecha_Alta)
+VALUES('05/01/2022','09/01/2022')
+
+INSERT INTO Hist_Ingreso(Fecha_Ingreso,Fecha_Alta)
+VALUES('18/12/2021','04/01/2022')
+
+--Inserciones en la tabla medicos
+INSERT INTO Medico(Nombres,Apellidos,Especialidad,Fecha_Nacimiento,Cedula,Edad,Telefono,Direccion_Dom,Municipio,Departamento)
+Values('Rober','Aucky','Ortopedista','23/04/1989','121-230489-113J',33 ,'85559565','Por Maxipali','Juigalpa','Chontales')
+
+INSERT INTO Medico(Nombres,Apellidos,Especialidad,Fecha_Nacimiento,Cedula,Edad,Telefono,Direccion_Dom,Municipio,Departamento)
+Values('Mary','Rodriguez','Cardiologia','11/09/1980','141-110980-978H',42 ,'77468957','3c sur de SINSA','Leon','Leon')
+
+INSERT INTO Medico(Nombres,Apellidos,Especialidad,Fecha_Nacimiento,Cedula,Edad,Telefono,Direccion_Dom,Municipio,Departamento)
+Values('Alberto','Benitez','Neurocirujano','08/12/1992','001-081292-124A',30 ,'81213656','Costado este de catedral','Managua','Managua')
+
+INSERT INTO Medico(Nombres,Apellidos,Especialidad,Fecha_Nacimiento,Cedula,Edad,Telefono,Direccion_Dom,Municipio,Departamento)
+Values('Gianlucas','Alfaro','Obstetra','18/11/1872','152-181172-002N', 50,'85642539','Del Bancentro 1c sur','Yali','Jinotega')
+
+INSERT INTO Medico(Nombres,Apellidos,Especialidad,Fecha_Nacimiento,Cedula,Edad,Telefono,Direccion_Dom,Municipio,Departamento)
+Values('Ali','Fernandez','Pediatría','14/10/1991','013-141091-886C', 31,'54143120','Barrio Maritza Rodriguez','Ciudad Sandino','Managua')
+
+SELECT *FROM Medico
+--Inserciones en la tabla pacientes
+INSERT INTO Paciente(Nombres,Apellidos,NS_Medico,Fecha_Nacimiento,Sexo,Edad,Cedula,Telefono,Direccion_Dom,Municipio,Departamento)
+VALUES('Joan','Capdebilla',12155847 ,'03/04/1999','M',23 ,'105-030499-123B','84548789','Por el santuario','Mulukukú','Matagalpa')
+
+INSERT INTO Paciente(Nombres,Apellidos,NS_Medico,Fecha_Nacimiento,Sexo,Edad,Cedula,Telefono,Direccion_Dom,Municipio,Departamento)
+VALUES('Monica','	Villamore',1546298 ,'13/11/1998','F',24 ,'201-131198-548F','84140000','Mercado 2c oeste','El viejo','Chinandega')
+
+INSERT INTO Paciente(Nombres,Apellidos,NS_Medico,Fecha_Nacimiento,Sexo,Edad,Cedula,Telefono,Direccion_Dom,Municipio,Departamento)
+VALUES('Gerard','Aptuá', 12258965,'06/06/1991','F',31 ,'005-060691-464K','57789664','Del cementerio 20vrs este','Esteli','Esteli')
+
+INSERT INTO Paciente(Nombres,Apellidos,NS_Medico,Fecha_Nacimiento,Sexo,Edad,Cedula,Telefono,Direccion_Dom,Municipio,Departamento)
+VALUES('Bart','Aptuá', 159687423,'01/06/1982','M',40 ,'005-010682-056R','57789664','Del cementerio 20vrs este','Esteli','Esteli')
+
+INSERT INTO Paciente(Nombres,Apellidos,NS_Medico,Fecha_Nacimiento,Sexo,Edad,Cedula,Telefono,Direccion_Dom,Municipio,Departamento)
+VALUES('Antonela','Aptuá', 12245844,'17/12/1997','F',25 ,'005-171297-555B','57789664','Del cementerio 20vrs este','Esteli','Esteli')
+
+--actualizaciones
+--Paciente
+UPDATE PACIENTE SET Telefono='84845626' WHERE Id_Paciente=5
+
+UPDATE PACIENTE SET Apellidos='Capdevila' WHERE Id_Paciente=1
+
+--Medicos
+UPDATE Medico SET Nombres='Eliza' WHERE Nombres='Mary'
+
+UPDATE Medico SET Cedula='029-141091-888R' WHERE Id_Medico=10
+
+--Historial
+
+UPDATE Hist_Ingreso SET Fecha_Ingreso='26/11/2021' WHERE Id_Hist_Ingreso=2
+
+UPDATE Hist_Ingreso SET Fecha_Alta= '01/12/2021' WHERE Id_Hist_Ingreso=2
+
+--Visita
+
+UPDATE Visita SET Tratamiento= 'Dos cervezas en ayuna' WHERE Id_Visita=1
+
+UPDATE Visita SET Tratamiento= 'Falta de oxigenacion' WHERE Id_Visita=5
+
+
+SELECT *FROM Visita
+--Eliminaciones de registros
+--Visita
+DELETE FROM Visita WHERE Id_Visita=4
+DELETE FROM Visita WHERE Id_Visita=5
+
+--Historial
+DELETE FROM Hist_Ingreso WHERE Id_Hist_Ingreso=1 OR Id_Hist_Ingreso=2
+
+--Medicos
+DELETE FROM Medico WHERE Departamento='Managua'
+
+--Pacientes
+DELETE FROM Paciente WHERE Id_Paciente=4 OR Id_Paciente=5
