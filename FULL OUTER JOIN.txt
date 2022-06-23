@@ -1,0 +1,7 @@
+USE Northwind;
+GO
+
+SELECT Products.ProductID, Products.ProductName, [Order Details].OrderID, [Order Details].Quantity, [Order Details].UnitPrice
+FROM Products
+FULL OUTER JOIN [Order Details] 
+ON [Order Details].ProductID=Products.ProductID

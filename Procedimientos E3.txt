@@ -1,0 +1,287 @@
+USE Northwind;
+GO
+
+
+/*4*/
+CREATE PROCEDURE Pcdt4
+	@OrderID	INT
+AS
+	BEGIN
+		SELECT OrderID, ProductID, UnitPrice
+		FROM [Order Details]
+		WHERE OrderID=@OrderID
+	END
+GO
+EXECUTE Pcdt4 10251
+
+/*5*/
+CREATE PROCEDURE Pcdt5
+	@CompanyName	VARCHAR(50)
+AS
+	BEGIN
+		SELECT CompanyName
+		FROM Customers
+		WHERE CompanyName=@CompanyName
+	END
+GO
+EXECUTE Pcdt5 'Alfreds Futterkiste'
+
+/*6*/
+CREATE PROCEDURE Pcdt6
+	@OrderID	INT,
+	@ProductID	INT
+AS
+	BEGIN
+		SELECT OrderID, ProductID, UnitPrice
+		FROM [Order Details]
+		WHERE OrderID=@OrderID AND ProductID=@ProductID
+	END
+GO
+EXECUTE Pcdt6 10251,57
+
+/*7*/
+CREATE PROCEDURE Pcdt7
+	@OrderID	INT,
+	@ProductID	INT
+AS
+	BEGIN
+		SELECT OrderID, ProductID, UnitPrice
+		FROM [Order Details]
+		WHERE OrderID=@OrderID OR ProductID=@ProductID
+	END
+GO
+EXECUTE Pcdt7 10251,57
+
+/*8*/
+CREATE PROCEDURE Pcdt8
+	@OrderID	INT
+
+AS
+	BEGIN
+		IF  @OrderID>=11000
+			SELECT OrderID, ProductID, UnitPrice
+			FROM [Order Details]
+			WHERE OrderID>=11000
+		ELSE
+			PRINT 'El Id de Order debe ser mayor a 11000'
+		
+	END
+GO
+DROP PROCEDURE Pcdt8
+EXECUTE Pcdt8 11000
+
+/*9*/
+CREATE PROCEDURE Pcdt9
+	@OrderID	INT,
+	@OrderID2	INT
+AS
+	BEGIN
+		IF @OrderID>=11000 AND @OrderID2<=11003
+		SELECT OrderID, ProductID, UnitPrice
+		FROM [Order Details]
+		WHERE OrderID>=11000 AND OrderID<=11003
+	ELSE
+		PRINT 'Los registros deben estar entre 11000 y 11003'
+	END
+GO
+
+EXECUTE Pcdt9 11000, 11003
+
+/*10*/
+CREATE PROCEDURE Pcdt10
+	@OrderID	INT,
+	@OrderID2	INT
+AS
+	BEGIN
+		IF @OrderID>=11000 AND @OrderID2<=11003
+		SELECT OrderID, ProductID, UnitPrice
+		FROM [Order Details]
+		WHERE OrderID BETWEEN 11000 AND 11003
+	ELSE
+		PRINT 'Los registros deben estar entre 11000 y 11003'
+	END
+GO
+EXECUTE Pcdt10 11000,1003
+
+/*11*/
+CREATE PROCEDURE Pcdt11
+	@CompanyName	VARCHAR(1)
+AS
+	BEGIN
+		IF @CompanyName='A'
+		SELECT CompanyName FROM Customers
+		WHERE CompanyName LIKE 'A%' 
+	END
+GO
+
+EXECUTE Pcdt11 'A'
+
+/*12*/
+CREATE PROCEDURE Pcdt12
+	@CompanyName	VARCHAR(2)
+AS
+	BEGIN
+		IF @CompanyName='MA'
+		SELECT CompanyName FROM Customers
+		WHERE CompanyName LIKE 'MA%' 
+	END
+GO
+EXECUTE Pcdt12 'MA'
+
+/*13*/
+CREATE PROCEDURE Pcdt13
+	@RegionDescription	VARCHAR(50)
+AS
+	BEGIN
+		IF @RegionDescription='TERN'
+		SELECT RegionDescription FROM Region
+		WHERE RegionDescription LIKE '%TERN%' 
+	END
+GO
+EXECUTE Pcdt13 'TERN'
+
+/*14*/
+CREATE PROCEDURE Pcdt14
+	@OrderID	VARCHAR(5)
+AS
+	BEGIN
+		IF @OrderID='_0285'
+		SELECT OrderID FROM [Order Details]
+		WHERE OrderID LIKE '_0285' 
+	END
+GO
+EXECUTE Pcdt14 '_0285'
+
+/*16*/
+CREATE PROCEDURE Pcdt16
+	@OrderID	INT
+AS
+	BEGIN
+		IF @OrderID IN (10248,10255,10270)
+		SELECT *FROM [Order Details]
+		WHERE OrderID IN (10248, 10255, 10270)
+	END
+GO
+EXECUTE Pcdt16 10248
+
+/*17*/
+CREATE PROCEDURE Pcdt17
+	@OrderID	INT
+AS
+	BEGIN
+		IF @OrderID=10248 OR @OrderID=10255 OR @OrderID=10270
+		SELECT *FROM [Order Details]
+		WHERE OrderID=10248 OR OrderID=10255 OR OrderID=10270
+	END
+GO
+EXECUTE Pcdt17 10255
+
+/*18*/
+ /*Es lo que te digo, vos dijiste que querias igual a como los habiamos hecho.
+ Por eso no le hallo sentido pedir un parametro, a menos que busques algo en especifico,
+ lo cual no alteraría los resultados anteriores*/
+CREATE PROCEDURE Pcdt18
+	@CatergoryName	VARCHAR(50)
+AS
+	BEGIN
+		SELECT CategoryName, CategoryID FROM Categories
+		WHERE CategoryName= @CatergoryName
+		ORDER BY CategoryName ASC
+	END
+GO
+EXECUTE Pcdt18 'Beverages'
+
+/*19*/
+CREATE PROCEDURE Pcdt19
+	@CatergoryName	VARCHAR(50)
+AS
+	BEGIN
+		SELECT CategoryName, CategoryID FROM Categories
+		WHERE CategoryName= @CatergoryName
+		ORDER BY CategoryName 
+	END
+GO
+EXECUTE Pcdt19 'Beverages'
+
+/*20*/
+CREATE PROCEDURE Pcdt20
+	@CatergoryName	VARCHAR(50)
+AS
+	BEGIN
+		SELECT CategoryName, CategoryID FROM Categories
+		WHERE CategoryName= @CatergoryName
+		ORDER BY CategoryName DESC
+	END
+GO
+EXECUTE Pcdt20 'Beverages'
+
+/*28*/
+CREATE PROCEDURE Pcdt28
+	@Lastname	VARCHAR(1)
+AS
+	BEGIN
+		IF @Lastname LIKE 'D%'
+			SELECT EmployeeID, LastName FROM Employees
+			WHERE LastName LIKE 'D%'
+		ELSE
+			PRINT 'Presiona la letra D'
+	END
+GO
+EXECUTE Pcdt28 'D'
+
+/*29*/
+CREATE PROCEDURE Pcdt29
+	@Lastname	VARCHAR(1)
+AS
+	BEGIN
+		IF @Lastname = 'N'
+			SELECT EmployeeID, LastName FROM Employees
+			WHERE LastName LIKE '%N'
+		ELSE
+			PRINT 'Presiona la letra N'
+	END
+GO
+EXECUTE Pcdt29 'N'
+
+/*30*/
+CREATE PROCEDURE Pcdt30
+	@title	VARCHAR(60)
+AS
+	BEGIN
+		IF @title LIKE '%SALES%'
+			SELECT EmployeeID, LastName, title FROM Employees
+			WHERE Title LIKE '%SALES%'
+		ELSE
+			PRINT 'Digitar SALES'
+	END
+GO
+EXECUTE Pcdt30 'SALES'
+
+/*31*/
+CREATE PROCEDURE Pcdt31
+	@title	VARCHAR(60)
+AS
+	BEGIN
+		IF @title LIKE '%REPRESENTATIVE%'
+			SELECT EmployeeID, LastName, title FROM Employees
+			WHERE Title LIKE '%REPRESENTATIVE%'
+		ELSE
+			PRINT 'Digitar REPRESENTATIVE'
+	END
+GO
+EXECUTE Pcdt31 'REPRESENTATIVE'
+
+/*32*/
+CREATE PROCEDURE Pcdt32
+	@OrderID	VARCHAR(5)
+AS
+	BEGIN
+		IF @OrderID LIKE '_0248'
+			SELECT OrderID FROM [Order Details]
+			WHERE OrderID LIKE '_0248'
+	END
+GO
+EXECUTE Pcdt32 '_0248'
+
+
+	
